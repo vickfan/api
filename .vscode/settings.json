@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "delvify",
+            "database": "delvify",
+            "username": "vickfan",
+            "password": "19941014"
+        }
+    ]
+}
