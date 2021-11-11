@@ -1,27 +1,15 @@
 import { Request, Response } from "express";
-import { ListService } from "../service/listService";
+import { TasksService } from "../service/taskService";
 
-export class ListsController {
-    constructor(private listService: ListService) {}
+export class TasksController {
+    constructor(private taskService: TasksService) {}
 
-    getLists = async (req: Request, res: Response) => {
-        try {
-            let lists = await this.listService.getLists();
-            res.status(200).json(lists);
-            return;
-        } catch (e) {
-            console.error(e);
-            res.status(500).json({ error: "internal server error" });
-            return;
-        }
-    };
-
-    getList = async (req: Request, res: Response) => {
+    getTasksByListId = async (req: Request, res: Response) => {
         let params = req.params.listId;
         let id = parseInt(params);
         try {
-            let list = await this.listService.getList(id);
-            res.status(200).json(list);
+            let tasks = await this.taskService.getTasksByListId(id);
+            res.status(200).json(tasks);
             return;
         } catch (e) {
             console.error(e);
@@ -30,10 +18,11 @@ export class ListsController {
         }
     };
 
-    postNewTask = async (req: Request, res: Response) => {
-        let listName = req.body.listName;
+    completeTask = async (req: Request, res: Response) => {
+        let params = req.params.taskId;
+        let id = parseInt(params);
         try {
-            await this.listService.postNewList(listName);
+            await this.taskService.completeTask(id);
             res.status(200).json({ success: true });
             return;
         } catch (e) {
@@ -43,12 +32,23 @@ export class ListsController {
         }
     };
 
-    deleteList = async (req: Request, res: Response) => {
+    newTask = async (req: Request, res: Response) => {
+        let body = req.body;
+        try {
+            await this.taskService.newTask(body);
+            res.status(200).json({ success: true });
+            return;
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({ error: "internal server error" });
+            return;
+        }
+    };
+
+    deleteTask = async (req: Request, res: Response) => {
         let { selectedList } = req.body;
         try {
-            for (let id of selectedList) {
-                await this.listService.deleteList(id);
-            }
+            await this.taskService.deleteTask(selectedList);
             res.status(200).json({ success: true });
             return;
         } catch (e) {

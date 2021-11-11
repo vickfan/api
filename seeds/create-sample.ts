@@ -7,33 +7,43 @@ export async function seed(knex: Knex): Promise<void> {
 
     // Inserts seed entries
     await knex("lists").insert([
-        { id: 1, is_active: true, name: "Bucket List" },
-        { id: 2, is_active: true, name: "To Do List" },
-        { id: 3, is_active: false, name: "deleted list" },
+        { is_active: true, name: "Bucket List" },
+        { is_active: true, name: "To Do List" },
+        { is_active: false, name: "deleted list" },
     ]);
 
     await knex("tasks").insert([
         {
-            content: "travel to the UK",
+            name: "travel",
+            description: "travel to the UK",
             list_id: 1,
             is_active: true,
             is_completed: false,
         },
         {
-            content: "visit Anfield",
+            name: "visiting",
+            description: "visit Anfield",
             list_id: 1,
             is_active: true,
             is_completed: false,
         },
         {
-            content: "buy milk",
+            name: "shopping",
+            description: "buy milk",
             list_id: 2,
             is_active: true,
             is_completed: false,
         },
-        { content: "wake up", list_id: 2, is_active: true, is_completed: true },
         {
-            content: "deleted",
+            name: "daily",
+            description: "wake up",
+            list_id: 2,
+            is_active: true,
+            is_completed: true,
+        },
+        {
+            name: "deleted",
+            description: "deleted",
             list_id: 2,
             is_active: false,
             is_completed: false,

@@ -11,8 +11,13 @@ export class ListService {
         return list;
     }
 
-    async getTasksByListId(listId: number) {
-        let tasks = await Lists.getTasksByListId(listId);
-        return tasks;
+    async postNewList(listName: string) {
+        await Lists.postNewList(listName);
+        return;
+    }
+
+    async deleteList(listId: number) {
+        await Lists.deleteList(listId);
+        return;
     }
 }

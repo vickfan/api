@@ -26,8 +26,12 @@ export const knex = Knex(knexConfig);
 //controller and services
 import { ListService } from "./service/listService";
 import { ListsController } from "./controller/listController";
+import { TasksService } from "./service/taskService";
+import { TasksController } from "./controller/taskController";
 const listService = new ListService();
 export const listController = new ListsController(listService);
+const taskService = new TasksService();
+export const taskController = new TasksController(taskService);
 
 //routes setting
 import { routes } from "./routes";

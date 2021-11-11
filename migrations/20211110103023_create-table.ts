@@ -11,7 +11,8 @@ export async function up(knex: Knex): Promise<void> {
     await knex.schema.createTable("tasks", (table) => {
         table.increments();
         table.date("deadline");
-        table.text("content").notNullable();
+        table.text("name").notNullable();
+        table.text("description").notNullable();
         table.integer("list_id").unsigned();
         table.foreign("list_id").references("lists.id");
         table.boolean("is_active").notNullable();
