@@ -27,4 +27,22 @@ export class TasksService {
         await Tasks.deleteTask(taskIdList);
         return;
     }
+
+    async moveTasks(taskIdList: number[], listId: number) {
+        await Tasks.moveTasks(taskIdList, listId);
+        return;
+    }
+
+    async updateTask(
+        row: {
+            name: string;
+            description: string;
+            deadline?: Date;
+            is_completed: boolean;
+        },
+        taskId: number
+    ) {
+        await Tasks.updateTask(row, taskId);
+        return;
+    }
 }

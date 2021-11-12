@@ -12,3 +12,5 @@ routes.get("/tasks/:listId", taskController.getTasksByListId);
 routes.get("/task/:taskId", taskController.completeTask);
 routes.post("/task", taskController.newTask);
 routes.put("/task", taskController.deleteTask);
+routes.put("/tasks/move", taskController.moveTasks);
+routes.put("/task/:taskId", taskController.updateTask);

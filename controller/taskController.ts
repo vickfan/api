@@ -57,4 +57,32 @@ export class TasksController {
             return;
         }
     };
+
+    moveTasks = async (req: Request, res: Response) => {
+        let { selectedList, listId } = req.body;
+        try {
+            await this.taskService.moveTasks(selectedList, listId);
+            res.status(200).json({ success: true });
+            return;
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({ error: "internal server error" });
+            return;
+        }
+    };
+
+    updateTask = async (req: Request, res: Response) => {
+        let { name, description, deadline, is_completed } = req.body;
+        let row = { name, description, deadline, is_completed };
+        let taskId = req.params.taskId;
+        try {
+            await this.taskService.updateTask(row, parseInt(taskId));
+            res.status(200).json({ success: true });
+            return;
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({ error: "internal server error" });
+            return;
+        }
+    };
 }

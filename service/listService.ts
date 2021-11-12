@@ -1,4 +1,5 @@
 import { Lists } from "../model/listsModel";
+import { Tasks } from "../model/taskModel";
 
 export class ListService {
     async getLists() {
@@ -18,6 +19,9 @@ export class ListService {
 
     async deleteList(listId: number) {
         await Lists.deleteList(listId);
+        let tasks = await Tasks.getTasksByListId(listId);
+        let taskIdList = tasks.map((task) => task.id);
+        await Tasks.deleteTask(taskIdList);
         return;
     }
 }

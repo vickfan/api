@@ -50,4 +50,33 @@ export class Tasks extends Model {
         }
         return;
     }
+
+    static async moveTasks(taskIdList: number[], listId: number) {
+        const txn = await knex.transaction();
+        try {
+            for (let id of taskIdList) {
+                await txn
+                    .update({ list_id: listId })
+                    .into("tasks")
+                    .where("id", id);
+            }
+            await txn.commit();
+        } catch {
+            await txn.rollback();
+        }
+        return;
+    }
+
+    static async updateTask(
+        row: {
+            name: string;
+            description: string;
+            deadline?: Date;
+            is_completed: boolean;
+        },
+        taskId: number
+    ) {
+        await knex.update(row).into("tasks").where("id", taskId);
+        return;
+    }
 }
