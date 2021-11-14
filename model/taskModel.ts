@@ -67,6 +67,10 @@ export class Tasks extends Model {
         return;
     }
 
+    static async getTaskByTaskId(taskId: number) {
+        return await knex.select("*").from("tasks").where("id", taskId).first();
+    }
+
     static async updateTask(
         row: {
             name: string;
@@ -78,5 +82,13 @@ export class Tasks extends Model {
     ) {
         await knex.update(row).into("tasks").where("id", taskId);
         return;
+    }
+
+    static async getTasksByExpiryDate(today: string) {
+        return await knex
+            .select("*")
+            .from("tasks")
+            .where("deadline", today)
+            .andWhere("is_completed", false);
     }
 }

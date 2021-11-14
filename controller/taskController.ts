@@ -1,8 +1,89 @@
 import { Request, Response } from "express";
 import { TasksService } from "../service/taskService";
+import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+import { CronJob } from "cron";
+
+dotenv.config();
+
+// nodemailer config
+// creating a test account
+nodemailer.createTestAccount((err, account) => {
+    let transporter = nodemailer.createTransport({
+        host: "smtp.ethereal.email",
+        port: 587,
+        secure: false,
+        auth: {
+            user: account.user,
+            pass: account.pass,
+        },
+    });
+});
+
+// checking if the environment is production or not
+let mailConfig;
+if (process.env.ENV === "production") {
+    mailConfig = {
+        //input real email config here
+    };
+} else {
+    mailConfig = {
+        host: "smtp-ethereal.email",
+        port: 587,
+        auth: {
+            user: "ethereal.user@ethereal.email",
+            pass: "verysecret",
+        },
+    };
+}
+
+let transporter = nodemailer.createTransport(mailConfig);
 
 export class TasksController {
-    constructor(private taskService: TasksService) {}
+    cronJob: CronJob;
+
+    constructor(private taskService: TasksService) {
+        this.cronJob = new CronJob("0 0 * * * ", async function () {
+            try {
+                let expiringTasks = await taskService.getExpiringTask();
+                for (let task of expiringTasks) {
+                    console.log(
+                        `==================================
+Task Name: ${task.name}
+Task Description: ${task.description}
+        
+==================================
+The above task has been expired
+----------------------------------
+                        `
+                    );
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        });
+    }
+
+    //     getExpiringTask = async (req: Request, res: Response) => {
+    //         try {
+    //             let expiringTasks = await this.taskService.getExpiringTask();
+    //             console.log(expiringTasks);
+    //             for (let task of expiringTasks) {
+    //                 console.log(
+    //                     `==================================
+    // Task Name: ${task.name}
+    // Task Description: ${task.description}
+
+    // ==================================
+    // The above task has been expired
+    // ----------------------------------
+    //                     `
+    //                 );
+    //             }
+    //         } catch (e) {
+    //             console.error(e);
+    //         }
+    //     };
 
     getTasksByListId = async (req: Request, res: Response) => {
         let params = req.params.listId;
@@ -22,7 +103,23 @@ export class TasksController {
         let params = req.params.taskId;
         let id = parseInt(params);
         try {
-            await this.taskService.completeTask(id);
+            let taskCompleted: {
+                id: number;
+                name: string;
+                deadline: null | Date;
+                description: string;
+            } = await this.taskService.completeTask(id);
+            console.log(
+                `==================================
+
+Task Name: ${taskCompleted.name}
+Task Description: ${taskCompleted.description}
+
+==================================
+The above task has been completed 
+----------------------------------
+                `
+            );
             res.status(200).json({ success: true });
             return;
         } catch (e) {

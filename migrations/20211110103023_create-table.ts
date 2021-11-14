@@ -10,7 +10,7 @@ export async function up(knex: Knex): Promise<void> {
 
     await knex.schema.createTable("tasks", (table) => {
         table.increments();
-        table.date("deadline");
+        table.string("deadline");
         table.text("name").notNullable();
         table.text("description").notNullable();
         table.integer("list_id").unsigned();

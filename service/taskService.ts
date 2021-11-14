@@ -1,4 +1,5 @@
 import { Tasks } from "../model/taskModel";
+import cron from "node-cron";
 
 export class TasksService {
     async getTasksByListId(listId: number) {
@@ -8,7 +9,8 @@ export class TasksService {
 
     async completeTask(taskId: number) {
         await Tasks.completeTask(taskId);
-        return;
+        let completedTask = await Tasks.getTaskByTaskId(taskId);
+        return completedTask;
     }
 
     async newTask(row: {
@@ -44,5 +46,14 @@ export class TasksService {
     ) {
         await Tasks.updateTask(row, taskId);
         return;
+    }
+
+    async getExpiringTask() {
+        let date = new Date();
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+        let today = `${year}-${month}-${day}`;
+        return await Tasks.getTasksByExpiryDate(today);
     }
 }

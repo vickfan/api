@@ -40,6 +40,7 @@ export async function seed(knex: Knex): Promise<void> {
             list_id: 2,
             is_active: true,
             is_completed: true,
+            deadline: new Date("2021-11-14"),
         },
         {
             name: "deleted",
