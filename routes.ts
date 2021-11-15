@@ -14,4 +14,3 @@ routes.post("/task", taskController.newTask);
 routes.put("/task", taskController.deleteTask);
 routes.put("/tasks/move", taskController.moveTasks);
 routes.put("/task/:taskId", taskController.updateTask);
-// routes.get("/expiringTask", taskController.getExpiringTask);

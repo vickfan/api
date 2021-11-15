@@ -64,26 +64,9 @@ The above task has been expired
         });
     }
 
-    //     getExpiringTask = async (req: Request, res: Response) => {
-    //         try {
-    //             let expiringTasks = await this.taskService.getExpiringTask();
-    //             console.log(expiringTasks);
-    //             for (let task of expiringTasks) {
-    //                 console.log(
-    //                     `==================================
-    // Task Name: ${task.name}
-    // Task Description: ${task.description}
-
-    // ==================================
-    // The above task has been expired
-    // ----------------------------------
-    //                     `
-    //                 );
-    //             }
-    //         } catch (e) {
-    //             console.error(e);
-    //         }
-    //     };
+    testing = async (req: Request, res: Response) => {
+        throw new Error("testing");
+    };
 
     getTasksByListId = async (req: Request, res: Response) => {
         let params = req.params.listId;
